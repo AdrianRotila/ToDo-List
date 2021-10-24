@@ -28,6 +28,7 @@ renderTodoList();
  function addItem(value){
    addItemToDOM(value);
    document.getElementById('item').value = '';
+   sendItemToAPI(value);
 
    data.todo.push(value);
    dataObjectUpdated();
@@ -121,4 +122,23 @@ function completeItem(){
     item.appendChild(buttons);
 
     list.insertBefore(item, list.childNodes[0]);
+ }
+
+ /** 
+  * Method for sending to-do item to API
+  */
+ function sendItemToAPI(item){    
+   var req = new XMLHttpRequest();
+   req.open('POST', '/add');
+   req.setRequestHeader('Content-Type', 'application/json');
+   req.send(JSON.stringify({item: item}));
+   
+   req.addEventListener('load', (e) => {
+      console.log(req.responseText);
+   });
+
+    req.addEventListener('error', () => {
+      console.log('Something bad happened');
+      console.log(e);
+    });
  }
